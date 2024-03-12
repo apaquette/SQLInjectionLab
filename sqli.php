@@ -36,14 +36,18 @@
         $conn->exec($sql);
                                                 
         // Check if username and password are correct
-        $query = "SELECT * FROM users WHERE username = '$Uname' AND password = '$Pword'";
+        //$query = "SELECT * FROM users WHERE username = '$Uname' AND password = '$Pword'";
         echo "<br><br>";
 		//  Check if username and password are correct
-        $query = "SELECT * FROM users WHERE username = '$Uname' AND password = '$Pword'";
-         echo $query;
+        $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? AND password = ?");
+        $stmt->bindParam(1, $Uname);
+        $stmt->bindParam(2, $Pword);
         
-        $result = $conn->query($query);
-        $rowCount = $result->rowCount();
+        // echo $query;
+        
+        //$result = $conn->query($query);
+        $result = $stmt->execute();
+        $rowCount = $stmt->rowCount();
         
         if($result === false) {
             echo "Error: " . $query . "<br>";
